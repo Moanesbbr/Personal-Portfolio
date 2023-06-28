@@ -1,8 +1,0 @@
-{
-    "functions": {
-      "version": 2,
-      "directory": "api",
-      "runtime": "nodejs14.x"
-    }
-  }
-  
