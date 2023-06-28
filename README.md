@@ -2,7 +2,7 @@
 	<h1> My Portfolio </h1>
 </div>
 
-Now, you can see it here : https://moaensbbr.vercel.app/ .
+Now, you can see it here : https://moanesbbr.me .
 
 
 ## Tech Stack ✨
@@ -10,7 +10,6 @@ Now, you can see it here : https://moaensbbr.vercel.app/ .
 - [React.js](https://reactjs.org/) - UI Library
 - [Framer Motion](https://www.framer.com/motion/) - Animations
 - [Create React App](https://create-react-app.dev/) - Build tool
-- [Netlify](https://www.netlify.com/) - Hosting and Deployment
 
 ## How to run locally 💻
 
@@ -19,13 +18,13 @@ Follow these steps to run My Portfolio in your local machine.
 ### Clone this repository
 
 ```bash
-git clone https://github.com/Pappyjay23/my-portfolio-1.git
+git clone https://github.com/Moanesbbr/Personal-Portfolio
 ```
 
 ### Navigate to directory
 
 ```bash
-cd my-portfolio-1
+cd my_portfolio
 ```
 
 ### Install NPM
