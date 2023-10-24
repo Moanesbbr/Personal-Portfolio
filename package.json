@@ -40,5 +40,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "<div align=\"center\">\r \t<h1> My Portfolio </h1>\r </div>",
+  "main": "submitComment.js",
+  "devDependencies": {},
+  "author": "",
+  "license": "ISC"
 }

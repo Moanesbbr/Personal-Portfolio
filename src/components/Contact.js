@@ -3,37 +3,72 @@ import "../styles/Contact.css";
 import { motion } from "framer-motion";
 import NavLinks from "./navbar/NavLinks";
 import axios from "axios";
+import { google } from 'googleapis';
+import nodemailer from 'nodemailer';
 
 const Contact = ({ handleNav }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(false); // Track success state
   const [error, setError] = useState(null);
 
-  const fade = {
-    opacity: 1,
-    transition: {
-      duration: 1.5,
+  // OAuth2 credentials
+  const oauth2Credentials = {
+    web: {
+      client_id: "325610695928-jfl4ncvd1s58boluaf61u4dkrca5nkvk.apps.googleusercontent.com",
+      project_id: "dev-spirit-402913",
+      auth_uri: "https://accounts.google.com/o/oauth2/auth",
+      token_uri: "https://oauth2.googleapis.com/token",
+      auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+      client_secret: "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",
     },
   };
 
-  const verticalLeft = {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1.5,
-    },
-  };
+  // OAuth2 client
+  const oAuth2Client = new google.auth.OAuth2({
+    clientId: oauth2Credentials.web.client_id,
+    clientSecret: oauth2Credentials.web.client_secret,
+    redirectUri: 'YOUR_REDIRECT_URI', // Replace with your actual redirect URI
+  });
 
-  const submitComment = async (commentData) => {
+  // Set up the Gmail API
+  const gmail = google.gmail({
+    version: 'v1',
+    auth: oAuth2Client,
+  });
+
+  const sendEmail = async (to, subject, body) => {
     try {
-      await axios.post('/api/submitComment', commentData);
-      // Handle success, show a success message, etc.
+      const accessToken = await oAuth2Client.getAccessToken();
+      const transport = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          type: 'OAuth2',
+          user: 'YOUR_EMAIL', // Replace with your Gmail email
+          clientId: oauth2Credentials.web.client_id,
+          clientSecret: oauth2Credentials.web.client_secret,
+          refreshToken: 'YOUR_REFRESH_TOKEN', // Replace with your refresh token
+          accessToken: accessToken,
+        },
+      });
+
+      const mailOptions = {
+        from: 'YOUR_EMAIL', // Replace with your Gmail email
+        to: to,
+        subject: subject,
+        text: body,
+      };
+
+      // Send the email
+      await transport.sendMail(mailOptions);
+
+      // Set success state to true
+      setSuccess(true);
     } catch (error) {
-      console.error('Error submitting comment:', error);
-      // Handle error, show an error message, etc.
+      console.error('Error sending email:', error);
+      throw error;
     }
   };
 
@@ -52,7 +87,10 @@ const Contact = ({ handleNav }) => {
 
     try {
       // Submit the comment
-      await submitComment(commentData);
+      await axios.post('/api/submitComment', commentData);
+
+      // Send the email
+      await sendEmail('moanesbbr@gmail.com', 'Contact Form Submission', `Name: ${name}\nEmail: ${email}\nMessage: ${message}`);
 
       // Reset form fields
       setName("");
